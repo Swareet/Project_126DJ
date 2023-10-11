@@ -1,5 +1,9 @@
 song1="";
 song2="";
+leftWristx= 0;
+leftWristy= 0;
+rightWristx= 0;
+rightWristy = 0;
 
 function setup()
 {
@@ -8,6 +12,27 @@ function setup()
 
     video = createCapture(VIDEO);
     video.hide();
+
+    posenet = ml5.poseNet(video, modelLoaded);
+	posenet.on('pose', gotposes);
+}
+
+function modelLoaded(){
+	console.log("Pose is Initialized");
+}
+
+function gotposes(results){
+	if(results.length > 0)
+	{
+		console.log(results);
+		leftWristx = results[0].pose.leftWrist.x;
+		leftWristy = results[0].pose.leftWrist.y;
+		console.log("the x coordinates of the leftWrist is "+ leftWristx + " the Y coordinates of the leftWrist is "+ leftWristy);
+		
+		rightWristx =results[0].pose.rightWrist.x;
+		rightWristy = results[0].pose.rightWrist.y;
+		console.log("the x coordinates of the rightWrist is "+ rightWristx + " the Y coordinates of the rightWrist is "+ rightWristy)
+	}
 }
 
 function preload()
@@ -23,5 +48,7 @@ function draw()
 
 function play()
 {
-    song.play();
+    song1.play();
+    song1.volume(1);
+	song1.rate(1);
 }
